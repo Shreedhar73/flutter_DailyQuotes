@@ -1,7 +1,12 @@
+import 'dart:math';
+
+
 import 'package:daily_quotes/ApiServices/remoteServices.dart';
-import 'package:daily_quotes/Widgets/QuotesTile.dart';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+
+
 
 class HomePage extends StatelessWidget {
 
@@ -12,7 +17,7 @@ class HomePage extends StatelessWidget {
       body: SafeArea(
         child: SingleChildScrollView(
           child: Container(
-            color: Colors.blue.shade100,
+            color: Colors.transparent,
             child: Column(
               children: [
                 Padding(
@@ -27,24 +32,56 @@ class HomePage extends StatelessWidget {
                          future: RemoteServices.fetchQuotes(),
                          builder: (context, snapshot){
                         if(snapshot.hasData){
-                          final quotes = snapshot.data;
-                          print(quotes.length);
+                          final quotes = snapshot.data..shuffle();
+                          List colors = [Colors.red.shade100, Colors.greenAccent.shade100, Colors.blue.shade100,Colors.lime.shade100,Colors.amber.shade100, Colors.purple.shade200, Colors.lightGreen, Colors.white12, Colors.indigoAccent];
+                          Random rng = new Random();
+                          var l = new List.generate( quotes.length, (_) => rng.nextInt(4));
+                          l.shuffle();
+
+
+
                           return ListView.builder(
+
+                            
+
                               itemCount: quotes.length,
                               itemBuilder: (context,index){
                                 final quote = quotes[index];
+                                print(quotes.length);
                             return Card(
+
+                              margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                               elevation: 25,
-                              color: Colors.white,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Text(quote.text == null ? "RANDOM QUOTES"
-                                  : quote.text),
-                                  Text(quote.author == null ?""
-                                  :quote.author)
-                                ],
+                              color: colors[l[index]],
+
+                              child: Container(
+
+
+                                // decoration: BoxDecoration(
+                                //     color: Colors.black87.withOpacity(0.99),
+                                //
+                                //   // image: DecorationImage(
+                                //   //
+                                //   //   image: NetworkImage("https://source.unsplash.com/random/$i"),
+                                //   //   fit: BoxFit.fill,
+                                //   //
+                                //   // )
+                               // ),
+                                padding: const EdgeInsets.all(25.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+
+
+                                    Text(quote.text == null ? "RANDOM QUOTES"
+                                    : quote.text, style: TextStyle(color: Colors.black,fontSize: 25, fontWeight: FontWeight.w600),),
+
+                                    SizedBox(height: 10,),
+                                    Text(quote.author == null ?""
+                                    : "- " +quote.author, style: TextStyle(fontSize: 18, ),)
+                                  ],
+                                ),
                               ),
                             );
 
@@ -55,15 +92,7 @@ class HomePage extends StatelessWidget {
                 )
 
                 
-                   // Container(
-                   //   height: MediaQuery.of(context).size.height*0.9,
-                   //   child: ListView.builder(
-                   //      itemCount: 50,
-                   //      scrollDirection: Axis.vertical,
-                   //      itemBuilder: (context, index){
-                   //        return QuotesTile();
-                   //      }),
-                   // )
+
 
 
 
