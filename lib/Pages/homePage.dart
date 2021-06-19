@@ -2,9 +2,11 @@ import 'dart:math';
 
 
 import 'package:daily_quotes/ApiServices/remoteServices.dart';
+import 'package:daily_quotes/Pages/QuotePage.dart';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 
 
@@ -48,39 +50,44 @@ class HomePage extends StatelessWidget {
                               itemBuilder: (context,index){
                                 final quote = quotes[index];
                                 print(quotes.length);
-                            return Card(
+                            return InkWell(
+                              onTap: (){
+                                Get.to(()=> QuotePage(quote.text, quote.author, colors[l[index]]));
+                              },
+                              child: Card(
 
-                              margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                              elevation: 25,
-                              color: colors[l[index]],
+                                margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                                elevation: 25,
+                                color: colors[l[index]],
 
-                              child: Container(
-
-
-                                // decoration: BoxDecoration(
-                                //     color: Colors.black87.withOpacity(0.99),
-                                //
-                                //   // image: DecorationImage(
-                                //   //
-                                //   //   image: NetworkImage("https://source.unsplash.com/random/$i"),
-                                //   //   fit: BoxFit.fill,
-                                //   //
-                                //   // )
-                               // ),
-                                padding: const EdgeInsets.all(25.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
+                                child: Container(
 
 
-                                    Text(quote.text == null ? "RANDOM QUOTES"
-                                    : quote.text, style: TextStyle(color: Colors.black,fontSize: 25, fontWeight: FontWeight.w600),),
+                                  // decoration: BoxDecoration(
+                                  //     color: Colors.black87.withOpacity(0.99),
+                                  //
+                                  //   // image: DecorationImage(
+                                  //   //
+                                  //   //   image: NetworkImage("https://source.unsplash.com/random/$i"),
+                                  //   //   fit: BoxFit.fill,
+                                  //   //
+                                  //   // )
+                                 // ),
+                                  padding: const EdgeInsets.all(25.0),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
 
-                                    SizedBox(height: 10,),
-                                    Text(quote.author == null ?""
-                                    : "- " +quote.author, style: TextStyle(fontSize: 18, ),)
-                                  ],
+
+                                      Text(quote.text == null ? "RANDOM QUOTES"
+                                      : quote.text, style: TextStyle(color: Colors.black,fontSize: 25, fontWeight: FontWeight.w600),),
+
+                                      SizedBox(height: 10,),
+                                      Text(quote.author == null ?"Random"
+                                      : "- " +quote.author, style: TextStyle(fontSize: 18, ),)
+                                    ],
+                                  ),
                                 ),
                               ),
                             );
