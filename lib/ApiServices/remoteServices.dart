@@ -1,23 +1,37 @@
+import 'dart:convert';
+
 import 'package:daily_quotes/Models/QuotesModel.dart';
+import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
+import 'package:path_provider/path_provider.dart';
 
-class RemoteServices{
-  static var client = http.Client();
-  final Quotes quote;
-  RemoteServices(this.quote);
+class RemoteServices {
+  Box box;
 
-  static Future <List<Quotes>> fetchQuotes() async{
-    var response = await client.get("https://type.fit/api/quotes");
-    if (response.statusCode == 200){
-      var jsonString = response.body;
-      return quotesFromJson(jsonString);
-    }
-    else{
-      return null;
-    }
+  Future openBox() async {
+    var dir = await getApplicationDocumentsDirectory();
+    Hive.init(dir.path);
+    box = await Hive.openBox('data');
+    return;
   }
 
+  static var client = http.Client();
+  //
 
+  Future<List<Quotes>> fetchQuotes() async {
+    await openBox();
+    try {
+      var response = await client.get(Uri.parse("https://type.fit/api/quotes"));
 
+      var _jsonDecode = response.body;
 
+      await box.add(_jsonDecode);
+
+      return quotesFromJson(_jsonDecode);
+    } catch (SocketException) {
+      var data = box.get("quotes");
+
+      return quotesFromJson(data);
+    }
+  }
 }

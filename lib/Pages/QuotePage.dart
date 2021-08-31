@@ -36,7 +36,7 @@ class QuotePage extends StatelessWidget {
       body: Card(
         color: colour ,
         child: Padding(
-          padding: const EdgeInsets.all(25.0),
+          padding: const EdgeInsets.all(50.0),
           child: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
