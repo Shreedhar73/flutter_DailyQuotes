@@ -7,8 +7,21 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
   RemoteServices rm = RemoteServices();
+
+  @override
+  void initState() {
+    super.initState();
+
+    rm.fetchQuotes();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,58 +62,67 @@ class HomePage extends StatelessWidget {
                               quotes.length, (_) => rng.nextInt(4));
                           l.shuffle();
 
-                          return ListView.builder(
-                              itemCount: quotes.length,
-                              itemBuilder: (context, index) {
-                                final quote = quotes[index];
-                                print(quotes.length);
-                                return InkWell(
-                                  onTap: () {
-                                    Get.to(() => QuotePage(quote.text,
-                                        quote.author, colors[l[index]]));
-                                  },
-                                  child: Card(
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(25)),
-                                    margin: const EdgeInsets.symmetric(
-                                        horizontal: 20, vertical: 20),
-                                    elevation: 25,
-                                    color: colors[l[index]],
-                                    child: Container(
-                                      padding: const EdgeInsets.all(25.0),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            quote.text == null
-                                                ? "RANDOM QUOTES"
-                                                : quote.text,
-                                            style: TextStyle(
-                                                color: Colors.black,
-                                                fontSize: 25,
-                                                fontWeight: FontWeight.w600),
-                                          ),
-                                          SizedBox(
-                                            height: 10,
-                                          ),
-                                          Text(
-                                            quote.author == null
-                                                ? "Random"
-                                                : "- " + quote.author,
-                                            style: TextStyle(
-                                              fontSize: 18,
+                          return RefreshIndicator(
+                            child: ListView.builder(
+                                itemCount: quotes.length,
+                                itemBuilder: (context, index) {
+                                  final quote = quotes[index];
+                                  print(quotes.length);
+                                  return InkWell(
+                                    onTap: () {
+                                      Get.to(() => QuotePage(quote.text,
+                                          quote.author, colors[l[index]]));
+                                    },
+                                    child: Card(
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(25)),
+                                      margin: const EdgeInsets.symmetric(
+                                          horizontal: 20, vertical: 20),
+                                      elevation: 25,
+                                      color: colors[l[index]],
+                                      child: Container(
+                                        padding: const EdgeInsets.all(25.0),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              quote.text == null
+                                                  ? "RANDOM QUOTES"
+                                                  : quote.text,
+                                              style: TextStyle(
+                                                  color: Colors.black,
+                                                  fontSize: 25,
+                                                  fontWeight: FontWeight.w600),
                                             ),
-                                          )
-                                        ],
+                                            SizedBox(
+                                              height: 10,
+                                            ),
+                                            Text(
+                                              quote.author == null
+                                                  ? "Random"
+                                                  : "- " + quote.author,
+                                              style: TextStyle(
+                                                fontSize: 18,
+                                              ),
+                                            )
+                                          ],
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                );
+                                  );
+                                }),
+                            onRefresh: () {
+                              return Future.delayed(Duration(seconds: 1), () {
+                                setState(() {
+                                  rm.fetchQuotes();
+                                });
                               });
+                            },
+                          );
                         }
                         return Center(child: CircularProgressIndicator());
                       }),
