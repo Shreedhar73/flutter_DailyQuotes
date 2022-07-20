@@ -9,8 +9,6 @@ jobs:
   CI-Upload-APK:
     name: Production build uploading
     runs-on: windows-latest
-
-    env: KEY: ${{secrets.KEY}}
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-java@v1
