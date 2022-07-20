@@ -1,23 +1,21 @@
-name: Test Workflow
-
-on: 
+name: CI
+on:
   push:
-    branches: 
+    branches:
       - master
 
 jobs:
-  CI-Upload-APK:
-    name: Production build uploading
+  flutter_run:
+    name: RUN flutter
     runs-on: windows-latest
-    steps:
+    steps: 
       - uses: actions/checkout@v2
       - uses: actions/setup-java@v1
-       with:
+        with:
           java-version: "11"
       - uses: subosito/flutter-action@v1
-       with:  
-          channel:"stable"
+        with:
+          channel: "stable"
       - run: flutter pub get
-      - run : flutter build apk --release
-
-
+      - run: flutter build apk --release
+      
