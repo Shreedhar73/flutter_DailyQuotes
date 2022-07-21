@@ -5,7 +5,7 @@ on:
       - master
 
 jobs: 
-  build:
+  initial_setup:
     name: Build & Release
     runs-on: windows-latest
     steps:
@@ -22,7 +22,7 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           artifacts: "build/app/outputs/apk/debug/*"
-          tag: v1.0.${{ github.run_number }}
+          tag: android_v1.0.${{ github.run_number }}
           token: ${{ secrets.TOKEN }}
   build_ios:
     name: Build and Release Ios
@@ -48,6 +48,6 @@ jobs:
       uses: ncipollo/release-action@v1
       with:
         artifacts: "build/ios/iphoneos/app.ipa"
-        tag: v1.0.${{ github.run_number }}
+        tag: ios_v1.0.${{ github.run_number }}
         token: ${{ secrets.TOKEN }}
     
