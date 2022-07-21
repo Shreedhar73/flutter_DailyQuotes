@@ -44,6 +44,7 @@ jobs:
   push_to_releases:
     name: push to release
     runs-on: macos-latest
+    needs: [build_android,build_ios]
     steps:
     - name : Push to Releases
       uses: ncipollo/release-action@v1
